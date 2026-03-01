@@ -21,6 +21,8 @@ District-level risk scoring
 Economic justification modeling
 Scalable automation
 This project addresses these gaps.
+
+
 System Architecture
 1.Data Layer
 Automated Agmarknet API ingestion
