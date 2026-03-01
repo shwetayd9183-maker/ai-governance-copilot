@@ -24,6 +24,8 @@ This project addresses these gaps.
 
 
 System Architecture
+
+
 1.Data Layer
 Automated Agmarknet API ingestion
 Multi-crop support (Onion, Tomato, Potato)
