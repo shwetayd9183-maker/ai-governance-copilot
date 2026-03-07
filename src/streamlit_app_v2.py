@@ -368,13 +368,24 @@ with col_c6:
     )
     st.altair_chart(c6, use_container_width=True)
 
-st.subheader("Rainfall Anomaly Context")
-st.caption("Provides climate context. Unusual rains can delay or accelerate harvesting, leading to supply shocks.")
-c7_line = alt.Chart(df_90d).mark_line(color='#5f9ea0', size=3).encode(
-    x=alt.X('Date:T', title=""),
-    y=alt.Y('rain_anomaly_30d:Q', title="Rainfall Anomaly (mm)", scale=alt.Scale(zero=False))
-)
-st.altair_chart(c7_line, use_container_width=True)
+st.subheader("Actual Regional Rainfall (Last 90 Days)")
+st.caption("Raw daily precipitation data to identify immediate weather-driven supply disruptions.")
+
+if district_name in district_geo:
+    lat, lon = district_geo[district_name]
+    df_rain_raw = fetch_rainfall(lat, lon, 90)
+    if df_rain_raw is not None:
+        df_rain_raw = df_rain_raw.reset_index().rename(columns={"index": "Date"})
+        df_rain_raw["Date"] = pd.to_datetime(df_rain_raw["Date"], format="%Y%m%d")
+        
+        c7_rain = alt.Chart(df_rain_raw).mark_bar(color='#5f9ea0', opacity=0.8).encode( # Cadet blue
+            x=alt.X('Date:T', title=""),
+            y=alt.Y('rainfall_mm:Q', title="Rainfall (mm)")
+        )
+        st.altair_chart(c7_rain, use_container_width=True)
+    else:
+        st.info("Rainfall telemetry currently unavailable for this region.")
+
 
 st.markdown("---")
 
