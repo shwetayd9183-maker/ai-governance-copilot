@@ -277,7 +277,7 @@ crash_html = f"""
 """
 col6.markdown(crash_html, unsafe_allow_html=True)
 
-col7.metric("Est. Farmer Loss Risk", f"₹{expected_farmer_loss_cr:.2f} Cr", help="Simulated statewide economic loss to farmers if the AI-predicted crash materializes at current volumes.")
+col7.metric("Est. Farmer Loss Risk", f"₹{expected_farmer_loss_cr:,.2f} Cr", help="Simulated statewide economic loss to farmers if the AI-predicted crash materializes at current volumes.")
 
 st.markdown("---")
 
@@ -533,7 +533,6 @@ if st.button("Explain Market Risk"):
             f"The KrishiRakshak AI engine indicates **{trend}** with a crash probability of **{crash_prob*100:.1f}%** for {district_name} ({crop}). "
             f"This is primarily driven by {surge_text}, as current arrivals hit {current_arrival:,.0f} quintals against a 30-day average of {avg_arrival_30d:,.0f}. "
             f"Historical 14-day volatility stands at {df_feats.iloc[-1]['vol_14']*100:.1f}%. "
-            f"Additionally, recent rainfall anomalies ({rain_anomaly:+.1f} mm) have influenced harvest timing. "
             f"Intervention is {'highly recommended' if net > 0 else 'not financially viable at current policy levels'}." )
     
 # (5) Adding Responsible Use AI Disclaimer
