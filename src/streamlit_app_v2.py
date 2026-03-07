@@ -526,9 +526,9 @@ st.markdown("---")
 # ---------------------------------------------------
 st.subheader("AI Market Insight Panel")
 if st.button("Explain Market Risk"):
-    if crash_prob > 0.35:
+    if crash_prob > 0.70:
         trend = "High Risk - Immediate Intervention Required"
-    elif crash_prob > 0.20:
+    elif crash_prob >= 0.40:
         trend = "Monitor Closely"
     else:
         trend = "Stable Conditions"
