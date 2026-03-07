@@ -5,6 +5,8 @@ import joblib
 import os
 import requests
 from datetime import date, timedelta
+import boto3
+import json
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -90,6 +92,35 @@ def compute_rain_anomaly(district):
 
     return df_recent["rainfall_mm"].mean() - df_year["rainfall_mm"].mean()
 
+
+# ---------------------------------------------------
+# AMAZON BEDROCK COPILOT
+# ---------------------------------------------------
+def get_bedrock_recommendation(district, crash_prob, rain_anomaly):
+    try:
+        client = boto3.client('bedrock-runtime', region_name='us-east-1')
+        prompt = f"Given a {crash_prob*100:.1f}% price crash risk in {district} and current rainfall anomaly of {rain_anomaly:.1f}mm, provide a concise governance and procurement recommendation."
+        
+        request_body = {
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens": 200,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        }
+        
+        response = client.invoke_model(
+            modelId='anthropic.claude-3-sonnet-20240229-v1:0',
+            body=json.dumps(request_body)
+        )
+        
+        response_body = json.loads(response.get('body').read())
+        return response_body['content'][0]['text']
+    except Exception as e:
+        return f"Bedrock API Error: Please ensure AWS credentials are configured. ({str(e)})"
 
 # ---------------------------------------------------
 # LOAD MODEL & DATA
@@ -232,6 +263,14 @@ if latest_row is not None:
         st.error("⚠ High Crash Risk — Consider Early Procurement")
     else:
         st.success("No Immediate Crash Risk")
+        
+    # Bedrock Fallback "Insurance Policy"
+    if 0.30 <= crash_prob <= 0.60:
+        st.info("🤖 **Model Uncertainty Detected (30%-60%). Consulting Amazon Bedrock Copilot...**")
+        with st.spinner("Generating policy advisory..."):
+            rain_anomaly = latest_row["rain_anomaly_30d"]
+            recommendation = get_bedrock_recommendation(district_name, crash_prob, rain_anomaly)
+            st.markdown(f"> {recommendation}")
 
     # Economic Simulation
     current_price = latest_row["Modal_Price"]
