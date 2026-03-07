@@ -131,7 +131,9 @@ def compute_rain_anomaly(district):
 # ---------------------------------------------------
 # LOAD MODEL & DATA
 # ---------------------------------------------------
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+if os.path.basename(BASE_DIR) == 'src':
+    BASE_DIR = os.path.dirname(BASE_DIR)
 
 st.sidebar.header("Market Selection")
 crop = st.sidebar.selectbox("Select Crop", ["Onion", "Tomato", "Potato"])
