@@ -526,7 +526,12 @@ st.markdown("---")
 # ---------------------------------------------------
 st.subheader("AI Market Insight Panel")
 if st.button("Explain Market Risk"):
-    trend = "elevated risk" if crash_prob > 0.3 else "stable conditions"
+    if crash_prob > 0.35:
+        trend = "High Risk - Immediate Intervention Required"
+    elif crash_prob > 0.20:
+        trend = "Monitor Closely"
+    else:
+        trend = "Stable Conditions"
     surge_text = f"a notable supply surge ({arrival_surge:.1f}x normal)" if arrival_surge > 1.2 else "normal supply volumes"
     
     st.info(f"**Powered by Amazon Bedrock Insights**\n\n"
