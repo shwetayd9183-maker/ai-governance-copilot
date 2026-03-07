@@ -534,14 +534,24 @@ if st.button("Explain Market Risk"):
         trend = "Stable Conditions"
     surge_text = f"a notable supply surge ({arrival_surge:.1f}x normal)" if arrival_surge > 1.2 else "normal supply volumes"
     
+    if crash_prob > 0.70:
+        action_text = f"Intervention is **highly recommended** (Projected Net Benefit: ₹{net/10000000:.2f} Cr)."
+        goal_text = "Execute targeted procurement to stabilize local prices and protect margins."
+    elif crash_prob >= 0.40:
+        action_text = "Intervention is **not required yet**, but agencies should prepare logistics."
+        goal_text = "Monitor daily arrivals; alert local warehousing to stand by."
+    else:
+        action_text = "Intervention is **not recommended**. Market is operating normally."
+        goal_text = "Allow free-market clearing; conserve state budget."
+
     st.info(f"**Powered by Amazon Bedrock Insights**\n\n"
             f"🚨 **Risk Level**: **{trend}** ({crash_prob*100:.1f}% crash probability for {district_name} {crop})\n\n"
-            f"**The Problem:**\n"
-            f"- **Supply Strain**: Driven by {surge_text} (Current: {current_arrival:,.0f} qtl vs 30-day avg: {avg_arrival_30d:,.0f} qtl).\n"
-            f"- **Market Instability**: Historical 14-day price volatility is tracking at {df_feats.iloc[-1]['vol_14']*100:.1f}%.\n\n"
-            f"**KrishiRakshak AI Solution:**\n"
-            f"- **Policy Action**: Intervention is **{'highly recommended' if net > 0 else 'not financially viable at current levels'}**.\n"
-            f"- **Strategic Goal**: Execute targeted, data-driven procurement to stabilize local prices and protect farmer margins before the crash materializes."
+            f"**Current Status:**\n"
+            f"- **Supply**: {surge_text.capitalize()} (Current: {current_arrival:,.0f} qtl vs 30-day avg: {avg_arrival_30d:,.0f} qtl).\n"
+            f"- **Volatility**: Historical 14-day price volatility is tracking at {df_feats.iloc[-1]['vol_14']*100:.1f}%.\n\n"
+            f"**KrishiRakshak AI Advisory:**\n"
+            f"- **Policy Action**: {action_text}\n"
+            f"- **Strategic Goal**: {goal_text}"
             )
     
 # (5) Adding Responsible Use AI Disclaimer
