@@ -264,9 +264,9 @@ if latest_row is not None:
     else:
         st.success("No Immediate Crash Risk")
         
-    # Bedrock Fallback "Insurance Policy"
-    if 0.30 <= crash_prob <= 0.60:
-        st.info("🤖 **Model Uncertainty Detected (30%-60%). Consulting Amazon Bedrock Copilot...**")
+    # Bedrock Policy Advisory
+    if st.button("Generate AI Policy Advisory"):
+        st.info("🤖 **Consulting Amazon Bedrock Copilot...**")
         with st.spinner("Generating policy advisory..."):
             rain_anomaly = latest_row["rain_anomaly_30d"]
             recommendation = get_bedrock_recommendation(district_name, crash_prob, rain_anomaly)
