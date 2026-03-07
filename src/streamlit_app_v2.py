@@ -253,7 +253,7 @@ X_latest = pd.DataFrame([latest[feature_cols]], columns=feature_cols)
 X_latest = X_latest.apply(pd.to_numeric, errors="coerce").fillna(0)
 crash_prob = model.predict_proba(X_latest)[0, 1]
 
-expected_farmer_loss_cr = (current_price * 0.20) * current_arrival * crash_prob / 10
+expected_farmer_loss_cr = (current_price * 0.20) * current_arrival * crash_prob / 10000000
 # ---------------------------------------------------
 # TOP KPIs
 # ---------------------------------------------------
