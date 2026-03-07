@@ -534,7 +534,7 @@ if st.button("Explain Market Risk"):
             f"This is primarily driven by {surge_text}, as current arrivals hit {current_arrival:,.0f} quintals against a 30-day average of {avg_arrival_30d:,.0f}. "
             f"Historical 14-day volatility stands at {df_feats.iloc[-1]['vol_14']*100:.1f}%. "
             f"Additionally, recent rainfall anomalies ({rain_anomaly:+.1f} mm) have influenced harvest timing. "
-            f"Intervention is {'highly recommended' if net_benefit > 0 else 'not financially viable at current policy levels'}." )
+            f"Intervention is {'highly recommended' if net > 0 else 'not financially viable at current policy levels'}." )
     
 # (5) Adding Responsible Use AI Disclaimer
 st.markdown("<br><br><br>", unsafe_allow_html=True)
