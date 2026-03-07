@@ -535,10 +535,14 @@ if st.button("Explain Market Risk"):
     surge_text = f"a notable supply surge ({arrival_surge:.1f}x normal)" if arrival_surge > 1.2 else "normal supply volumes"
     
     st.info(f"**Powered by Amazon Bedrock Insights**\n\n"
-            f"The KrishiRakshak AI engine indicates **{trend}** with a crash probability of **{crash_prob*100:.1f}%** for {district_name} ({crop}). "
-            f"This is primarily driven by {surge_text}, as current arrivals hit {current_arrival:,.0f} quintals against a 30-day average of {avg_arrival_30d:,.0f}. "
-            f"Historical 14-day volatility stands at {df_feats.iloc[-1]['vol_14']*100:.1f}%. "
-            f"Intervention is {'highly recommended' if net > 0 else 'not financially viable at current policy levels'}." )
+            f"🚨 **Risk Level**: **{trend}** ({crash_prob*100:.1f}% crash probability for {district_name} {crop})\n\n"
+            f"**The Problem:**\n"
+            f"- **Supply Strain**: Driven by {surge_text} (Current: {current_arrival:,.0f} qtl vs 30-day avg: {avg_arrival_30d:,.0f} qtl).\n"
+            f"- **Market Instability**: Historical 14-day price volatility is tracking at {df_feats.iloc[-1]['vol_14']*100:.1f}%.\n\n"
+            f"**KrishiRakshak AI Solution:**\n"
+            f"- **Policy Action**: Intervention is **{'highly recommended' if net > 0 else 'not financially viable at current levels'}**.\n"
+            f"- **Strategic Goal**: Execute targeted, data-driven procurement to stabilize local prices and protect farmer margins before the crash materializes."
+            )
     
 # (5) Adding Responsible Use AI Disclaimer
 st.markdown("<br><br><br>", unsafe_allow_html=True)
