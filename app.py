@@ -125,7 +125,7 @@ def get_bedrock_recommendation(district, crash_prob, rain_anomaly):
 # ---------------------------------------------------
 # LOAD MODEL & DATA
 # ---------------------------------------------------
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 crop = st.sidebar.selectbox("Select Crop", ["Onion", "Tomato", "Potato"])
 crop_lower = crop.lower()

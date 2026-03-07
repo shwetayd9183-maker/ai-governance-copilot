@@ -9,7 +9,8 @@ COPY src/ ./src/
 COPY data/ ./data/
 COPY models/ ./models/
 COPY config.py .
+COPY app.py .
 
-EXPOSE 8501
+EXPOSE 8080
 
-CMD ["streamlit", "run", "src/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "app.py", "--server.port=8080", "--server.address=0.0.0.0"]
