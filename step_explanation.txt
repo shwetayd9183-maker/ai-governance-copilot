@@ -1,0 +1,68 @@
+AI GOVERNANCE COPILOT - CODEBASE WALKTHROUGH
+============================================
+
+This file explains the logic flow of the source code modules found in the 'src/' directory and experimentation notebooks.
+
+1. DATA PREPROCESSING
+   File: src/preprocessing.py
+   --------------------------
+   - Function: clean_agmarknet_csv(file_path, crop_name)
+   - Logic: 
+     1. Reads raw CSV data.
+     2. Standardizes column names (e.g., mapping "Modal Price..." to "Modal_Price").
+     3. Converts dates to datetime objects and prices to numerics.
+     4. Drops rows with missing critical data to ensure data quality.
+
+2. GROUND TRUTH LABELING (TRAINING PHASE)
+   File: src/labeling.py
+   ---------------------
+   - Function: compute_crop_aware_drop(df)
+   - Logic: Calculates the "future" price drop for historical data to create training labels.
+     It looks ahead (horizon) to find the minimum smoothed average price and compares it to the current price.
+   - Function: classify_severity(drop)
+   - Logic: Buckets the calculated drop into classes:
+     0 = Stable
+     1 = Moderate Risk
+     2 = Severe Risk (Crash)
+
+3. MODEL TRAINING
+   File: src/model.py
+   ------------------
+   - Function: prepare_features(df)
+   - Logic: One-hot encodes categorical variables (District, Crop) for the machine learning model.
+   - Function: train_model(df)
+   - Logic: 
+     1. Splits data into training and testing sets.
+     2. Computes class weights to handle the imbalance (since crashes are rare events).
+     3. Trains an XGBoost Classifier (objective="multi:softprob") to predict the severity class.
+
+4. ECONOMIC TRIGGER LOGIC
+   File: src/hybrid_trigger.py
+   -------------------------
+   - Function: should_intervene(...)
+   - Logic: The core governance rule. Returns True ONLY if:
+     (Crash_Probability > Threshold) AND (Expected_Farmer_Loss > Fiscal_Cost_of_Intervention).
+     This ensures tax money is only spent when economically justified.
+
+5. USER INTERFACE & INFERENCE
+   File: src/streamlit_app.py
+   --------------------------
+   - Climate Data: Fetches rainfall anomalies via NASA Power API (`fetch_rainfall`).
+   - Feature Engineering: Calculates rolling averages (7-day), volatility, and arrival spikes on-the-fly for the selected district.
+   - Prediction: Loads the saved XGBoost model to predict crash probability for the current view.
+   - Simulation: 
+     1. Takes user inputs for policy (Procurement %, Storage Cost).
+     2. Calculates Net Economic Benefit.
+     3. Runs a Budget Optimizer to allocate limited government funds to the highest-risk districts.
+
+6. MODEL TRAINING NOTEBOOK
+   File: notebooks/train_crash_model.ipynb
+   ---------------------------------------
+   - Goal: The primary script for training and saving the production model.
+   - Logic:
+     1. Data Loading: Reads raw CSVs and cleans column names.
+     2. Climate Integration: Fetches live rainfall data from NASA Power API to compute anomalies.
+     3. Feature Engineering: Creates rolling averages, volatility metrics, and arrival spikes.
+     4. Labeling: Defines "Crash" as a 15% price drop within a 7-day future window.
+     5. Training: Trains an XGBoost Classifier with class weights and CalibratedClassifierCV for accurate probabilities.
+     6. Export: Saves the trained model as 'xgb_crash_model.joblib' for the app to use.

@@ -95,15 +95,35 @@ def compute_rain_anomaly(district):
 # LOAD MODEL & DATA
 # ---------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-model = joblib.load(os.path.join(BASE_DIR, "models", "xgb_crash_model.joblib"))
 
-df = pd.read_csv(os.path.join(BASE_DIR, "data", "maharashtra_onion.csv"))
-df["Date"] = pd.to_datetime(df["Date"])
+crop = st.sidebar.selectbox("Select Crop", ["Onion", "Tomato", "Potato"])
+crop_lower = crop.lower()
 
-df = df.rename(columns={
-    "Arrival Quantity 01-01-2023 to 09-02-2026": "Arrival_MT",
-    "Modal Price 01-01-2023 to 09-02-2026": "Modal_Price"
-})
+model = joblib.load(os.path.join(BASE_DIR, "models", f"xgb_crash_model_{crop_lower}.joblib"))
+
+file_path = os.path.join(BASE_DIR, "data", f"maharashtra_{crop_lower}.csv")
+
+if crop_lower == 'tomato':
+    df = pd.read_csv(file_path)
+    df = df.rename(columns={
+        "arrival_quantity": "Arrival_MT",
+        "modal_price": "Modal_Price",
+        "date": "Date",
+        "district": "District"
+    })
+else:
+    df = pd.read_csv(file_path, skiprows=1)
+    df["Date"] = pd.to_datetime(df["Date"], format='mixed', dayfirst=True)
+    
+    cost_col = [c for c in df.columns if "Modal Price" in c][0]
+    arr_col = [c for c in df.columns if "Arrival Quantity" in c][0]
+    
+    df = df.rename(columns={
+        arr_col: "Arrival_MT",
+        cost_col: "Modal_Price"
+    })
+
+df["Date"] = pd.to_datetime(df["Date"], format='mixed', dayfirst=True)
 
 df["District"] = df["District"].astype(str)
 df = df[df["District"] != "nan"]
