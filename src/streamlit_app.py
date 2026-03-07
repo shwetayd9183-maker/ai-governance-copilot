@@ -12,7 +12,7 @@ import json
 # PAGE CONFIG
 # ---------------------------------------------------
 st.set_page_config(layout="wide")
-st.title("Phoenix AI — Climate-Aware Horticulture Stabilization Engine")
+st.title("KrishiRakshak AI — Climate-Aware Horticulture Stabilization Engine")
 
 # ---------------------------------------------------
 # DISTRICT GEO MAPPING

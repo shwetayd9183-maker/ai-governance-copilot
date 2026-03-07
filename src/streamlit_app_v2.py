@@ -11,7 +11,7 @@ import pydeck as pdk
 # ---------------------------------------------------
 # PAGE CONFIG
 # ---------------------------------------------------
-st.set_page_config(layout="wide", page_title="Phoenix AI Dashboard", page_icon="📈")
+st.set_page_config(layout="wide", page_title="KrishiRakshak AI Dashboard", page_icon="📈")
 
 st.markdown("""
 <style>
@@ -186,7 +186,7 @@ district_name = st.sidebar.selectbox("Select District", districts)
 last_updated_date = df["Date"].max().strftime("%d %b %Y")
 colA, colB = st.columns([4, 1])
 with colA:
-    st.markdown("<div class='main-title'>Phoenix AI : Climate-Aware Horticulture Engine</div>", unsafe_allow_html=True)
+    st.markdown("<div class='main-title'>KrishiRakshak AI : Climate-Aware Horticulture Engine</div>", unsafe_allow_html=True)
 with colB:
     st.markdown(f"<div style='text-align: right;'><span class='update-status'>🕒 Data as of: {last_updated_date}</span></div>", unsafe_allow_html=True)
 
@@ -528,7 +528,7 @@ if st.button("Explain Market Risk"):
     surge_text = f"a notable supply surge ({arrival_surge:.1f}x normal)" if arrival_surge > 1.2 else "normal supply volumes"
     
     st.info(f"**Powered by Amazon Bedrock Insights**\n\n"
-            f"The Phoenix AI engine indicates **{trend}** with a crash probability of **{crash_prob*100:.1f}%** for {district_name} ({crop}). "
+            f"The KrishiRakshak AI engine indicates **{trend}** with a crash probability of **{crash_prob*100:.1f}%** for {district_name} ({crop}). "
             f"This is primarily driven by {surge_text}, as current arrivals hit {current_arrival:,.0f} quintals against a 30-day average of {avg_arrival_30d:,.0f}. "
             f"Historical 14-day volatility stands at {df_feats.iloc[-1]['vol_14']*100:.1f}%. "
             f"Additionally, recent rainfall anomalies ({rain_anomaly:+.1f} mm) have influenced harvest timing. "
@@ -538,6 +538,6 @@ if st.button("Explain Market Risk"):
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.caption("""
 **⚠️ Responsible AI Use Disclaimer**: 
-All predictions, market intelligence, and intervention costs displayed by **Phoenix AI** are generated using Machine Learning models. 
+All predictions, market intelligence, and intervention costs displayed by **KrishiRakshak AI** are generated using Machine Learning models. 
 Please evaluate and locally validate these insights before taking serious policy action. This interface serves strictly as a **decision assistance tool** to complement ground-level expertise—not to make automated fiscal guarantees.
 """)
